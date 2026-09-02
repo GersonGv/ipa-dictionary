@@ -1,0 +1,187 @@
+[
+  {
+    "word": "issue",
+    "uk": "ˈɪʃ.uː",
+    "us": "ˈɪʃ.uː",
+    "senses": [
+      {
+        "pos": "noun",
+        "definition": "An important subject or problem that people are discussing or arguing about.",
+        "examples": [
+          "Housing was the main issue at the debate.",
+          "Let us deal with the safety issues first.",
+          "Money is not the issue here; time is."
+        ]
+      },
+      {
+        "pos": "verb",
+        "definition": "To officially give out or announce something.",
+        "examples": [
+          "The embassy issued a warning to travellers.",
+          "Each employee is issued with a security pass."
+        ]
+      }
+    ]
+  },
+  {
+    "word": "laboratory",
+    "uk": "ləˈbɒr.ə.tər.i",
+    "us": "ˈlæb.rə.tɔːr.i",
+    "note": "Stress falls on the second syllable in British English and the first in American English.",
+    "senses": [
+      {
+        "pos": "noun",
+        "definition": "A room or building equipped for scientific experiments, research, or teaching.",
+        "examples": [
+          "The samples were sent to an independent laboratory.",
+          "She runs a laboratory studying sleep and memory.",
+          "No food or drink is allowed in the laboratory."
+        ]
+      }
+    ]
+  },
+  {
+    "word": "leisure",
+    "uk": "ˈleʒ.ə",
+    "us": "ˈliː.ʒɚ",
+    "senses": [
+      {
+        "pos": "noun",
+        "definition": "Time when you are free from work or duties and can do what you enjoy.",
+        "examples": [
+          "He reads history in his leisure time.",
+          "The town has invested heavily in leisure facilities.",
+          "Read the contract at your leisure and call me next week."
+        ]
+      }
+    ]
+  },
+  {
+    "word": "literally",
+    "uk": "ˈlɪt.ər.əl.i",
+    "us": "ˈlɪt̬.ɚ.əl.i",
+    "senses": [
+      {
+        "pos": "adverb",
+        "definition": "According to the exact meaning of the words, without exaggeration or metaphor.",
+        "examples": [
+          "The word 'algebra' comes from Arabic and literally means 'reunion of broken parts'.",
+          "He was literally the last person to leave the building."
+        ]
+      }
+    ]
+  },
+  {
+    "word": "mobile",
+    "uk": "ˈməʊ.baɪl",
+    "us": "ˈmoʊ.bəl",
+    "note": "The American form usually ends in a reduced vowel; the British form keeps a full /aɪ/.",
+    "senses": [
+      {
+        "pos": "adjective",
+        "definition": "Able to move or be moved easily from place to place.",
+        "examples": [
+          "The clinic runs a mobile unit that visits villages.",
+          "After the operation she was mobile within a week."
+        ]
+      },
+      {
+        "pos": "noun",
+        "definition": "A telephone you can carry with you (chiefly British; Americans say 'cell phone').",
+        "examples": [
+          "My mobile is out of battery.",
+          "Give me a call on my mobile when you land."
+        ]
+      }
+    ]
+  },
+  {
+    "word": "necessary",
+    "uk": "ˈnes.ə.sər.i",
+    "us": "ˈnes.ə.ser.i",
+    "senses": [
+      {
+        "pos": "adjective",
+        "definition": "Needed in order for something to happen or be achieved.",
+        "examples": [
+          "Take whatever equipment is necessary for the trip.",
+          "It is not necessary to book in advance.",
+          "She made the necessary arrangements in a single afternoon."
+        ]
+      }
+    ]
+  },
+  {
+    "word": "neither",
+    "uk": "ˈnaɪ.ðə",
+    "us": "ˈniː.ðɚ",
+    "senses": [
+      {
+        "pos": "determiner",
+        "definition": "Not one nor the other of two people or things.",
+        "examples": [
+          "Neither candidate convinced the panel.",
+          "Neither of the doors was locked."
+        ]
+      },
+      {
+        "pos": "adverb",
+        "definition": "Used to show that a negative statement is also true of someone or something else.",
+        "examples": [
+          "I have not read it, and neither has she.",
+          "He could not swim, and neither could his brother."
+        ]
+      }
+    ]
+  },
+  {
+    "word": "nuclear",
+    "uk": "ˈnjuː.kli.ə",
+    "us": "ˈnuː.kli.ɚ",
+    "note": "British English keeps the /j/ after /n/; American English drops it.",
+    "senses": [
+      {
+        "pos": "adjective",
+        "definition": "Relating to the energy released when the nucleus of an atom is split or joined.",
+        "examples": [
+          "The country gets a third of its electricity from nuclear power.",
+          "Both sides agreed to resume nuclear disarmament talks.",
+          "The plant's nuclear reactor was shut down for maintenance."
+        ]
+      }
+    ]
+  },
+  {
+    "word": "often",
+    "uk": "ˈɒf.ən",
+    "us": "ˈɑː.fən",
+    "note": "The spelling pronunciation with an audible /t/ (ˈɒf.tən, ˈɑːf.tən) is common in both varieties.",
+    "senses": [
+      {
+        "pos": "adverb",
+        "definition": "Many times; on many occasions.",
+        "examples": [
+          "We often walk along the river after supper.",
+          "How often do the buses run on Sundays?",
+          "She does not write often, but her letters are long."
+        ]
+      }
+    ]
+  },
+  {
+    "word": "opportunity",
+    "uk": "ˌɒp.əˈtʃuː.nə.ti",
+    "us": "ˌɑː.pɚˈtuː.nə.t̬i",
+    "senses": [
+      {
+        "pos": "noun",
+        "definition": "An occasion or situation that makes it possible to do something you want to do.",
+        "examples": [
+          "The fellowship gave her the opportunity to work abroad.",
+          "I would like to take this opportunity to thank the volunteers.",
+          "Do not miss the opportunity to ask questions at the end."
+        ]
+      }
+    ]
+  }
+]

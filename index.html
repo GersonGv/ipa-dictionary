@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IPA Dictionary — UK &amp; US pronunciations</title>
+<meta name="description" content="Look up a word and see its British and American pronunciations in the International Phonetic Alphabet, with definitions and example sentences.">
+<meta name="color-scheme" content="light dark">
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>ə</text></svg>">
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="#">
+      <span class="brand-mark" aria-hidden="true">ə</span>
+      <span class="brand-text">IPA Dictionary</span>
+    </a>
+    <p class="tagline">British &amp; American pronunciations, written out</p>
+  </div>
+</header>
+
+<div class="wrap">
+  <form class="search" id="search-form" role="search" autocomplete="off">
+    <div class="search-field">
+      <svg class="search-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>
+      </svg>
+      <input
+        id="q"
+        type="search"
+        name="q"
+        placeholder="Search a word — try “schedule”"
+        aria-label="Search for a word"
+        role="combobox"
+        aria-expanded="false"
+        aria-controls="suggestions"
+        aria-autocomplete="list"
+        spellcheck="false">
+      <button type="button" id="clear" class="clear" aria-label="Clear search" hidden>&times;</button>
+    </div>
+    <ul id="suggestions" class="suggestions" role="listbox" aria-label="Suggestions" hidden></ul>
+  </form>
+</div>
+
+<main id="main" class="wrap">
+  <div id="status" class="status" role="status" aria-live="polite">Loading dictionary…</div>
+  <article id="entry" class="entry" hidden></article>
+
+  <section id="home" class="home" hidden>
+    <section class="panel" id="recent-panel" hidden>
+      <h2>Recently viewed</h2>
+      <ul class="chips" id="recent"></ul>
+    </section>
+
+    <section class="panel">
+      <h2>Words worth hearing twice</h2>
+      <p class="panel-note">These are pronounced noticeably differently on each side of the Atlantic.</p>
+      <ul class="chips" id="featured"></ul>
+    </section>
+
+    <section class="panel">
+      <h2>Reading the notation</h2>
+      <p class="panel-note">Symbols are written between slashes. A few that trip people up:</p>
+      <dl class="legend">
+        <div><dt>ˈ</dt><dd>Main stress — the syllable right after it is the strong one.</dd></div>
+        <div><dt>ˌ</dt><dd>Secondary stress, weaker than the main one.</dd></div>
+        <div><dt>ə</dt><dd>Schwa, the unstressed “uh” in <i>about</i>.</dd></div>
+        <div><dt>ː</dt><dd>The vowel before it is long.</dd></div>
+        <div><dt>ɚ / ɝː</dt><dd>An r-coloured vowel, typical of American English.</dd></div>
+        <div><dt>t̬</dt><dd>A tapped /t/, the quick d-like sound in American <i>better</i>.</dd></div>
+      </dl>
+    </section>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p><span id="count-note"></span> A static site — everything runs in your browser, nothing is sent anywhere.</p>
+  </div>
+</footer>
+
+<script type="module" src="assets/js/app.js"></script>
+</body>
+</html>

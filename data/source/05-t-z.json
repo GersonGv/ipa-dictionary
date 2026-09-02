@@ -1,0 +1,149 @@
+[
+  {
+    "word": "thorough",
+    "uk": "ˈθʌr.ə",
+    "us": "ˈθɝː.oʊ",
+    "note": "The final syllable is reduced to a schwa in Britain but keeps a full /oʊ/ in America.",
+    "senses": [
+      {
+        "pos": "adjective",
+        "definition": "Complete and careful, with attention to every detail.",
+        "examples": [
+          "The inspector gave the kitchen a thorough check.",
+          "She is thorough, so her reports rarely need corrections.",
+          "A thorough clean took most of the weekend."
+        ]
+      }
+    ]
+  },
+  {
+    "word": "tomato",
+    "uk": "təˈmɑː.təʊ",
+    "us": "təˈmeɪ.t̬oʊ",
+    "note": "The famous 'tomayto / tomahto' split.",
+    "senses": [
+      {
+        "pos": "noun",
+        "definition": "A soft red fruit eaten raw or cooked, used widely as a vegetable in cooking.",
+        "examples": [
+          "Slice the tomato thinly and season it with salt.",
+          "He grows six varieties of tomato in the greenhouse.",
+          "The sauce is simply tomato, garlic, and olive oil."
+        ]
+      }
+    ]
+  },
+  {
+    "word": "tuesday",
+    "display": "Tuesday",
+    "uk": "ˈtʃuːz.deɪ",
+    "us": "ˈtuːz.deɪ",
+    "note": "British English often palatalises the /tj/ to /tʃ/; American English drops the /j/ entirely.",
+    "senses": [
+      {
+        "pos": "noun",
+        "definition": "The day of the week after Monday and before Wednesday.",
+        "examples": [
+          "The class meets every Tuesday at six.",
+          "We fly out on Tuesday morning.",
+          "Last Tuesday was the wettest day of the year."
+        ]
+      }
+    ]
+  },
+  {
+    "word": "vitamin",
+    "uk": "ˈvɪt.ə.mɪn",
+    "us": "ˈvaɪ.t̬ə.mɪn",
+    "senses": [
+      {
+        "pos": "noun",
+        "definition": "A natural substance found in food that the body needs in small amounts to stay healthy.",
+        "examples": [
+          "Citrus fruit is a good source of vitamin C.",
+          "The doctor suggested a vitamin D supplement in winter.",
+          "A varied diet usually supplies every vitamin you need."
+        ]
+      }
+    ]
+  },
+  {
+    "word": "water",
+    "uk": "ˈwɔː.tə",
+    "us": "ˈwɑː.t̬ɚ",
+    "senses": [
+      {
+        "pos": "noun",
+        "definition": "The clear liquid that falls as rain and that people and animals drink.",
+        "examples": [
+          "Could I have a glass of water, please?",
+          "The water in the lake was surprisingly warm.",
+          "Turn the water off at the mains before you start."
+        ]
+      },
+      {
+        "pos": "verb",
+        "definition": "To pour water on plants or land.",
+        "examples": [
+          "Remember to water the tomatoes every evening.",
+          "The fields are watered by an old irrigation system."
+        ]
+      }
+    ]
+  },
+  {
+    "word": "weather",
+    "uk": "ˈweð.ə",
+    "us": "ˈweð.ɚ",
+    "senses": [
+      {
+        "pos": "noun",
+        "definition": "The condition of the air and sky at a particular time and place: rain, sun, wind, and temperature.",
+        "examples": [
+          "The weather turned during the night.",
+          "We will go ahead whatever the weather.",
+          "Cold weather is forecast for the rest of the week."
+        ]
+      }
+    ]
+  },
+  {
+    "word": "world",
+    "uk": "wɜːld",
+    "us": "wɝːld",
+    "senses": [
+      {
+        "pos": "noun",
+        "definition": "The earth and all the people, places, and things on it.",
+        "examples": [
+          "She has travelled all over the world.",
+          "The news spread around the world in hours."
+        ]
+      },
+      {
+        "pos": "noun",
+        "definition": "A particular area of activity or group of people.",
+        "examples": [
+          "In the world of publishing, timing is everything.",
+          "He knows the academic world from the inside."
+        ]
+      }
+    ]
+  },
+  {
+    "word": "zebra",
+    "uk": "ˈzeb.rə",
+    "us": "ˈziː.brə",
+    "senses": [
+      {
+        "pos": "noun",
+        "definition": "An African wild animal like a horse, with black and white stripes.",
+        "examples": [
+          "A herd of zebra crossed the road ahead of us.",
+          "No two zebra have exactly the same pattern of stripes.",
+          "The zebra is closely related to the horse and the donkey."
+        ]
+      }
+    ]
+  }
+]

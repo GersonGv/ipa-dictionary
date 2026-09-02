@@ -1,0 +1,233 @@
+[
+  {
+    "word": "dance",
+    "uk": "dɑːns",
+    "us": "dæns",
+    "senses": [
+      {
+        "pos": "verb",
+        "definition": "To move your body to a rhythm, usually in time with music.",
+        "examples": [
+          "They danced until the band packed up.",
+          "She learned to dance the tango in Buenos Aires."
+        ]
+      },
+      {
+        "pos": "noun",
+        "definition": "A series of movements performed to music, or a social event where people dance.",
+        "examples": [
+          "The final dance of the evening was a waltz.",
+          "There is a village dance every Saturday in summer."
+        ]
+      }
+    ]
+  },
+  {
+    "word": "data",
+    "uk": "ˈdeɪ.tə",
+    "us": "ˈdeɪ.t̬ə",
+    "note": "The pronunciation ˈdɑː.tə is also common in British English.",
+    "senses": [
+      {
+        "pos": "noun",
+        "definition": "Facts, measurements, or information, especially when collected for analysis.",
+        "examples": [
+          "The data suggest a slow but steady recovery.",
+          "We anonymise all customer data before analysis.",
+          "He spent a week cleaning the data before running the model."
+        ]
+      }
+    ]
+  },
+  {
+    "word": "decide",
+    "uk": "dɪˈsaɪd",
+    "us": "dɪˈsaɪd",
+    "senses": [
+      {
+        "pos": "verb",
+        "definition": "To choose something after thinking about the possibilities.",
+        "examples": [
+          "We decided to take the train instead of flying.",
+          "She still has not decided which offer to accept.",
+          "The committee will decide on Friday."
+        ]
+      }
+    ]
+  },
+  {
+    "word": "either",
+    "uk": "ˈaɪ.ðə",
+    "us": "ˈiː.ðɚ",
+    "note": "Both ˈaɪ.ðə and ˈiː.ðə are heard in Britain; ˈiː.ðɚ dominates in the United States.",
+    "senses": [
+      {
+        "pos": "determiner",
+        "definition": "One or the other of two people or things.",
+        "examples": [
+          "You can park on either side of the road.",
+          "Either answer would have been acceptable."
+        ]
+      },
+      {
+        "pos": "adverb",
+        "definition": "Used after a negative statement to mean 'also'.",
+        "examples": [
+          "I did not enjoy the film, and my brother did not either.",
+          "She cannot come, and he cannot either."
+        ]
+      }
+    ]
+  },
+  {
+    "word": "endeavour",
+    "uk": "ɪnˈdev.ə",
+    "us": "ɪnˈdev.ɚ",
+    "note": "Spelled 'endeavor' in American English.",
+    "senses": [
+      {
+        "pos": "noun",
+        "definition": "A serious and determined attempt to do something, especially something difficult.",
+        "examples": [
+          "The expedition was a remarkable endeavour.",
+          "Scientific endeavour depends on patient, unglamorous work."
+        ]
+      },
+      {
+        "pos": "verb",
+        "definition": "To try hard to do or achieve something.",
+        "examples": [
+          "We endeavour to reply to every message within a day.",
+          "She endeavoured to keep her voice steady."
+        ]
+      }
+    ]
+  },
+  {
+    "word": "figure",
+    "uk": "ˈfɪɡ.ə",
+    "us": "ˈfɪɡ.jɚ",
+    "note": "A rare case where the American form has an extra /j/ glide that the British form lacks.",
+    "senses": [
+      {
+        "pos": "noun",
+        "definition": "A number, especially one that forms part of official statistics.",
+        "examples": [
+          "The latest unemployment figures were published today.",
+          "Sales reached six figures for the first time."
+        ]
+      },
+      {
+        "pos": "noun",
+        "definition": "The shape of a person's body, or a person seen at a distance.",
+        "examples": [
+          "A tall figure appeared at the end of the corridor.",
+          "He is a well-known figure in local politics."
+        ]
+      }
+    ]
+  },
+  {
+    "word": "garage",
+    "uk": "ˈɡær.ɑːʒ",
+    "us": "ɡəˈrɑːʒ",
+    "note": "British English usually stresses the first syllable; American English the second.",
+    "senses": [
+      {
+        "pos": "noun",
+        "definition": "A building where a car is kept, usually next to or part of a house.",
+        "examples": [
+          "The bikes are in the garage behind the house.",
+          "We converted the garage into a small office."
+        ]
+      },
+      {
+        "pos": "noun",
+        "definition": "A business that repairs or sells cars and often sells fuel.",
+        "examples": [
+          "The garage said the gearbox needs replacing.",
+          "Stop at the garage on the corner and fill up."
+        ]
+      }
+    ]
+  },
+  {
+    "word": "genuine",
+    "uk": "ˈdʒen.ju.ɪn",
+    "us": "ˈdʒen.ju.ɪn",
+    "senses": [
+      {
+        "pos": "adjective",
+        "definition": "Real and exactly what it appears to be; not fake.",
+        "examples": [
+          "The certificate turned out to be genuine after all.",
+          "These are genuine leather, not a substitute."
+        ]
+      },
+      {
+        "pos": "adjective",
+        "definition": "Sincere and honest in feeling.",
+        "examples": [
+          "She showed genuine concern for the family.",
+          "There was genuine surprise on his face."
+        ]
+      }
+    ]
+  },
+  {
+    "word": "herb",
+    "uk": "hɜːb",
+    "us": "ɝːb",
+    "note": "American English typically drops the initial /h/; British English keeps it.",
+    "senses": [
+      {
+        "pos": "noun",
+        "definition": "A plant whose leaves or seeds are used to flavour food or as a medicine.",
+        "examples": [
+          "Add a handful of fresh herbs at the end of cooking.",
+          "She grows herbs in pots on the windowsill.",
+          "Mint is the easiest herb for a beginner to keep alive."
+        ]
+      }
+    ]
+  },
+  {
+    "word": "hospital",
+    "uk": "ˈhɒs.pɪ.təl",
+    "us": "ˈhɑː.spɪ.t̬əl",
+    "senses": [
+      {
+        "pos": "noun",
+        "definition": "A place where ill or injured people are treated and cared for.",
+        "examples": [
+          "He spent three nights in hospital after the accident.",
+          "The new children's hospital opens next spring.",
+          "She drove her neighbour to the hospital at two in the morning."
+        ]
+      }
+    ]
+  },
+  {
+    "word": "hurry",
+    "uk": "ˈhʌr.i",
+    "us": "ˈhɝː.i",
+    "senses": [
+      {
+        "pos": "verb",
+        "definition": "To move or do something more quickly than usual.",
+        "examples": [
+          "If we hurry, we can still catch the last ferry.",
+          "Do not hurry the decision; take the week you were given."
+        ]
+      },
+      {
+        "pos": "noun",
+        "definition": "The need or wish to do something quickly.",
+        "examples": [
+          "There is no hurry, the deadline is next month.",
+          "In her hurry she left the keys in the door."
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,171 @@
+[
+  {
+    "word": "privacy",
+    "uk": "ˈprɪv.ə.si",
+    "us": "ˈpraɪ.və.si",
+    "note": "The first vowel differs: short /ɪ/ in Britain, the diphthong /aɪ/ in America.",
+    "senses": [
+      {
+        "pos": "noun",
+        "definition": "The state of being free from being watched or disturbed by other people.",
+        "examples": [
+          "The high hedge gives the garden some privacy.",
+          "Patients have a right to privacy about their treatment.",
+          "He values his privacy and rarely gives interviews."
+        ]
+      }
+    ]
+  },
+  {
+    "word": "process",
+    "uk": "ˈprəʊ.ses",
+    "us": "ˈprɑː.ses",
+    "senses": [
+      {
+        "pos": "noun",
+        "definition": "A series of actions or steps taken in order to achieve a particular result.",
+        "examples": [
+          "The application process takes about six weeks.",
+          "Learning a language is a slow process.",
+          "We are in the process of moving house."
+        ]
+      },
+      {
+        "pos": "verb",
+        "definition": "To deal with documents or information in an official or systematic way.",
+        "examples": [
+          "It takes two days to process a refund.",
+          "The scanner processes about forty pages a minute."
+        ]
+      }
+    ]
+  },
+  {
+    "word": "quiet",
+    "uk": "ˈkwaɪ.ət",
+    "us": "ˈkwaɪ.ət",
+    "senses": [
+      {
+        "pos": "adjective",
+        "definition": "Making little or no noise.",
+        "examples": [
+          "The engine is remarkably quiet at low speed.",
+          "Please be quiet during the examination."
+        ]
+      },
+      {
+        "pos": "adjective",
+        "definition": "Without much activity, excitement, or disturbance.",
+        "examples": [
+          "We had a quiet weekend at home.",
+          "It is a quiet street, apart from the school run."
+        ]
+      }
+    ]
+  },
+  {
+    "word": "route",
+    "uk": "ruːt",
+    "us": "ruːt",
+    "note": "Many American speakers also say raʊt, especially for highways.",
+    "senses": [
+      {
+        "pos": "noun",
+        "definition": "The way you travel from one place to another.",
+        "examples": [
+          "The coastal route is longer but far prettier.",
+          "Roadworks forced us to take a different route.",
+          "The bus route was changed last September."
+        ]
+      }
+    ]
+  },
+  {
+    "word": "schedule",
+    "uk": "ˈʃed.juːl",
+    "us": "ˈskedʒ.uːl",
+    "note": "The most frequently cited British/American difference: 'shed-yool' versus 'sked-jool'.",
+    "senses": [
+      {
+        "pos": "noun",
+        "definition": "A plan listing what will happen and when it will happen.",
+        "examples": [
+          "The project is running two weeks behind schedule.",
+          "Her schedule is full until the end of the month.",
+          "Trains are back on schedule after the storm."
+        ]
+      },
+      {
+        "pos": "verb",
+        "definition": "To arrange for something to happen at a particular time.",
+        "examples": [
+          "The meeting is scheduled for Thursday morning.",
+          "They scheduled the launch to avoid the holidays."
+        ]
+      }
+    ]
+  },
+  {
+    "word": "situation",
+    "uk": "ˌsɪtʃ.uˈeɪ.ʃən",
+    "us": "ˌsɪtʃ.uˈeɪ.ʃən",
+    "senses": [
+      {
+        "pos": "noun",
+        "definition": "The set of conditions and events happening at a particular time and place.",
+        "examples": [
+          "The situation on the border remains tense.",
+          "We found ourselves in an awkward situation.",
+          "Given the situation, cancelling was the sensible choice."
+        ]
+      }
+    ]
+  },
+  {
+    "word": "sorry",
+    "uk": "ˈsɒr.i",
+    "us": "ˈsɑːr.i",
+    "senses": [
+      {
+        "pos": "adjective",
+        "definition": "Feeling regret or sadness about something you have done.",
+        "examples": [
+          "I am sorry I forgot to call you back.",
+          "She was sorry to have troubled them."
+        ]
+      },
+      {
+        "pos": "adjective",
+        "definition": "Feeling sympathy for someone else's misfortune.",
+        "examples": [
+          "We were very sorry to hear about your father.",
+          "I felt sorry for the dog left out in the rain."
+        ]
+      }
+    ]
+  },
+  {
+    "word": "suggest",
+    "uk": "səˈdʒest",
+    "us": "səɡˈdʒest",
+    "senses": [
+      {
+        "pos": "verb",
+        "definition": "To mention an idea or plan for someone else to consider.",
+        "examples": [
+          "May I suggest a shorter title?",
+          "She suggested meeting halfway between the two cities.",
+          "The doctor suggested cutting down on salt."
+        ]
+      },
+      {
+        "pos": "verb",
+        "definition": "To show that something is likely to be true.",
+        "examples": [
+          "The evidence suggests a fault in the wiring.",
+          "His silence suggested he already knew."
+        ]
+      }
+    ]
+  }
+]
