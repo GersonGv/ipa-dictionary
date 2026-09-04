@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Words beginning with {{ letter|upper }}{% if pages > 1 %} (page {{ page }} of {{ pages }}){% endif %} | {{ site_name }}{% endblock %}
+{% block description %}Every headword in {{ site_name }} beginning with the letter {{ letter|upper }}, with British and American IPA pronunciations.{% endblock %}
+
+{% block main %}
+<nav class="panel" aria-label="Browse by letter">
+  <ul class="chips letters">
+    {% for l in letters %}
+    <li><a href="{{ url_for('pages.browse', letter=l) }}" {% if l == letter %}aria-current="page" class="current"{% endif %}>{{ l|upper }}</a></li>
+    {% endfor %}
+  </ul>
+</nav>
+
+<h1 class="headword">{{ letter|upper }}</h1>
+<p class="panel-note">{{ "{:,}".format(total) }} headwords{% if pages > 1 %} · page {{ page }} of {{ pages }}{% endif %}.</p>
+
+<ul class="wordlist">
+  {% for word in words %}
+  <li><a href="{{ word.word|word_path }}">{{ word.display }}</a></li>
+  {% endfor %}
+</ul>
+
+{% if pages > 1 %}
+<nav class="pager" aria-label="Pagination">
+  {% if page > 1 %}<a rel="prev" href="{{ url_for('pages.browse', letter=letter, page=page-1) }}">← Previous</a>{% endif %}
+  <span>{{ page }} / {{ pages }}</span>
+  {% if page < pages %}<a rel="next" href="{{ url_for('pages.browse', letter=letter, page=page+1) }}">Next →</a>{% endif %}
+</nav>
+{% endif %}
+{% endblock %}

@@ -1,2 +1,10 @@
+.env
+__pycache__/
+*.pyc
+.venv/
+venv/
+build/
+*.sql
+*.sql.gz
 .DS_Store
-node_modules/
+tools/deploy.env

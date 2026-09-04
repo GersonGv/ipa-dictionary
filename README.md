@@ -1,136 +1,149 @@
 # IPA Dictionary
 
-A static dictionary web app. Every entry shows the British and American
-pronunciation in the International Phonetic Alphabet, a definition per sense,
-and example sentences. No audio, no back end, no tracking.
+A full English dictionary with the British and American pronunciation of every
+headword written out in the International Phonetic Alphabet, a definition per
+sense, and example sentences.
 
-## Run it locally
+Flask + MySQL, server-rendered, running as a single Phusion Passenger
+application on cPanel shared hosting. Every word has its own URL.
 
-```sh
-python3 -m http.server 8000     # or: npx serve .
-open http://localhost:8000
+```
+dictionary.example.com
+├── /                     home, search box, A–Z
+├── /word/schedule        one rendered page per headword
+├── /browse/s             every word beginning with S
+├── /search?q=…           ranked results
+├── /sitemap.xml          a sitemap index over every word
+└── /api/…                JSON: suggest, search, word, health
 ```
 
-There is no build step for the app itself — it is plain HTML, CSS, and one ES
-module. Only the data is generated.
+## Why it is shaped this way
 
-## Adding words
+**Server-rendered, not a client-side app.** A dictionary is worth having only
+if search engines can index it, which means a real HTML page per word rather
+than a hash route. That is also why the API and the pages are one Flask app on
+one subdomain: nothing here needs a second runtime, and a deploy is `git pull`
+plus a restart.
 
-Edit or add a file under `data/source/`. Each file is an array of entries:
+**The data ships as a database, not as files.** The earlier version of this
+project shipped JSON shards and did everything in the browser. That works up to
+a couple of thousand words and falls over well before a hundred thousand — the
+index alone would be megabytes before a reader has typed anything.
+
+**The lexicon is built offline.** `tools/build_data.sh` parses a 3 GB
+Wiktionary extract on your machine and emits one gzipped `.sql` file to import.
+Shared hosting has neither the memory nor the disk to do that itself.
+
+## Running it locally
+
+```sh
+python3 -m venv .venv
+.venv/bin/pip install -r requirements.txt
+cp .env.example .env          # point DATABASE_URL at a local MySQL
+.venv/bin/flask --app passenger_wsgi:application run --debug
+```
+
+SQLite works for poking at the templates (`DATABASE_URL=sqlite:///dev.db`), but
+two search tiers — the full-text pass over definitions and the SOUNDEX
+candidate pool behind "did you mean" — are MySQL features. Both degrade to
+something weaker instead of failing, so the app runs; it just finds less.
+
+## The data
+
+Built from [English Wiktionary](https://en.wiktionary.org) via
+[wiktextract](https://github.com/tatuylonen/wiktextract), filtered down to the
+words a general-purpose dictionary would actually print:
+
+- a **frequency cut** against Norvig's `count_1w` list, so ~200,000 taxonomic,
+  dialectal and obsolete entries do not bury the words people look up
+  (`MAX_RANK` in `tools/build_data.sh` moves this line);
+- a **sense filter** dropping obsolete, archaic, rare and misspelling senses;
+- **inflections become forms, not entries** — "ran" is recorded as a form of
+  "run", so looking it up lands on the entry rather than on a stub reading
+  "simple past of run".
+
+Pronunciations keep Wiktionary's own accent labels: Received Pronunciation and
+its neighbours become the UK column, General American and its neighbours the
+US one. An untagged transcription is used for both.
+
+Wiktionary is CC BY-SA 3.0, so the definitions and examples here are too.
+
+### Hand-written entries
+
+`data/curated/*.json` overrides the generated data word by word. That is where
+the editorial notes about UK/US differences live — Wiktionary has nowhere to
+put "British English stresses the second syllable, American English the third",
+and it is the most useful sentence on that page.
 
 ```json
 {
   "word": "schedule",
-  "display": "schedule",
   "uk": "ˈʃed.juːl",
   "us": "ˈskedʒ.uːl",
-  "note": "Optional. Shown in a callout under the pronunciations.",
+  "note": "Shown in a callout under the pronunciations.",
   "senses": [
     {
       "pos": "noun",
       "definition": "A plan listing what will happen and when it will happen.",
-      "examples": ["The project is running two weeks behind schedule.", "Her schedule is full until the end of the month."]
+      "examples": ["The project is running two weeks behind schedule."]
     }
   ]
 }
 ```
 
-Write the IPA without surrounding slashes — the app adds them. `display` is only
-needed when the headword should render differently from its lookup key (e.g.
-`tuesday` → `Tuesday`).
+IPA is written without the surrounding slashes — the templates add them. Add a
+file, rebuild, re-import.
 
-Then rebuild:
+## How search works
 
-```sh
-node tools/build.mjs
+Tiers, stopping at the first that fills the result list:
+
+1. exact headword
+2. exact inflected form — "ran" → "run"
+3. prefix, commonest word first
+4. substring anywhere in the headword
+5. full text over the one-line glosses
+6. bounded edit distance — "wather" → "water"
+
+Tiers 1–4 are index lookups. Tier 5 needs the FULLTEXT index on `words`. Tier 6
+is the only one doing work in Python, and the SQL feeding it is anchored on the
+first letter and on SOUNDEX so it never sees more than a few hundred
+candidates.
+
+## Layout
+
+```
+passenger_wsgi.py           Passenger entry point
+app/
+  __init__.py               app factory
+  config.py                 .env, loaded by absolute path
+  db.py                     engine + scoped session
+  models/word.py            words, senses, examples, forms
+  routes/pages.py           rendered pages, sitemap, robots
+  routes/api.py             JSON endpoints
+  services/search.py        the tiers above
+  templates/                Jinja
+  static/                   CSS and the search-box script
+data/curated/               hand-written entries that win over the generated ones
+tools/
+  build_data.sh             download → filter → dictionary.sql.gz
+  extract_wiktionary.py     the dump parser
+  build_sql.py              lexicon → MySQL dump (schema compiled from the models)
+  import_remote.sh          upload + import over SSH
+  deploy.sh                 git pull + restart
+docs/DEPLOY.md              cPanel setup, start to finish
 ```
 
-The build validates as it goes and refuses to write anything if an entry is
-missing a pronunciation, a definition, or has fewer than two examples. It writes:
+## Deploying
 
-- `data/index.json` — every headword plus a one-line gloss. Loaded once, drives the search box.
-- `data/entries/<letter>.json` — full entries, one shard per first letter, fetched only when a word in that letter is opened.
-
-## Deploying to GitHub Pages
-
-Yes, this works on GitHub Pages, and search works fully. See "Why search works
-without a server" below.
-
-1. Create a repo on your personal account and push this directory to `main`.
-2. Repo **Settings → Pages → Build and deployment → Source: GitHub Actions**.
-3. Push. `.github/workflows/deploy.yml` rebuilds the data (so a malformed source
-   file fails the deploy instead of shipping) and publishes the site.
-
-It lands at `https://<user>.github.io/<repo>/`. Nothing in the app hardcodes a
-path — every URL is relative and the data files are resolved from
-`import.meta.url` — so it works from a subpath or a custom domain unchanged.
-
-Two details that matter on Pages:
-
-- **`.nojekyll`** is committed. Without it, Pages runs the files through Jekyll,
-  which silently refuses to serve anything whose name starts with `_` — including
-  the `_.json` shard the build creates for headwords that do not start with a
-  letter.
-- **Routing uses the hash** (`#schedule`), not clean paths. Pages has no rewrite
-  rules, so `/schedule` would 404 on a hard refresh. With the hash, deep links,
-  bookmarks, refreshes, and the back button all work with no server config.
-
-## Why search works without a server
-
-Search here is not a query sent somewhere — it is a scan over an array already in
-memory. `index.json` is fetched once on load; typing filters it in a few
-milliseconds. What you lose by having no server is nothing this app needs.
-
-Matching runs in tiers: exact, prefix, word-internal, gloss text, then a bounded
-Levenshtein pass so `tomatoe` still finds `tomato` and `wather` finds `water`.
-No search library is needed at this scale — adding one would cost more bytes than
-the index itself.
-
-## Scaling the data
-
-The index costs roughly **95 bytes per word** as built (headword, parts of speech,
-truncated gloss); the shards cost roughly 460 bytes per word. GitHub Pages gzips
-text automatically, so divide transferred size by about 3.5.
-
-| Words | index.json (gzipped) | What to do |
-|---|---|---|
-| up to ~2,000 | ~55 KB | Nothing. Current design is comfortable. |
-| 2,000–20,000 | ~150–550 KB | Drop the gloss from the index (`tools/build.mjs`, the `index` map) — that alone cuts it to ~15 bytes per word. |
-| 20,000+ | too big to ship whole | Bucket the index by two-letter prefix and fetch `index/sc.json` as the user types, or precompute a trie. Consider [MiniSearch](https://github.com/lucaong/minisearch) or [Fuse.js](https://fusejs.io) only if you also want full-text ranking over definitions. |
-
-Shard size never becomes the problem — a shard is only fetched when a word in it
-is opened, and it is cached for the session. Splitting on two letters instead of
-one (`sc.json`) keeps shards small well past 100,000 entries.
-
-Pages' own limits are generous for this: 1 GB repo, 100 GB/month bandwidth,
-100 MB per file. A 100,000-word dictionary at this shape is roughly 50 MB — it
-fits, though the repo gets unwieldy long before Pages complains.
-
-### Why not an external API
-
-Considered and rejected for this project:
-
-- **Any API with a key** (Merriam-Webster, Oxford) is a bad fit for a static site.
-  The key ships in your JavaScript where anyone can read it and burn your quota.
-  Hiding it needs a proxy, which needs a server, which is the thing you are
-  avoiding.
-- **`dictionaryapi.dev`** is free and needs no key, but its phonetic data is
-  inconsistent — many words have no IPA at all, and it rarely labels which accent
-  a transcription represents. The whole point of this app is a reliable UK/US
-  pair, so that is fatal.
-- **Bundled data always renders.** No rate limits, no CORS surprises, no outage,
-  no request per lookup, and it works offline once loaded.
-
-The tradeoff is honest: coverage is whatever you curate. `data/source/` currently
-holds a starter set of about 50 words, weighted toward words whose British and
-American pronunciations actually differ.
+See [docs/DEPLOY.md](docs/DEPLOY.md).
 
 ## Limitations
 
-- Coverage is the curated word list, not a full lexicon. Unknown words say so.
-- One transcription per accent. Real dictionaries list variants; the `note` field
-  is the escape hatch for the important ones.
-- IPA rendering depends on the reader's fonts. The stack in `--ipa` starts with
-  fonts with good phonetic coverage and falls back to the system UI font, which
-  handles common symbols but can render rarer ones (`t̬`, `ɚ`) unevenly.
+- One transcription per accent. Real dictionaries list variants; `note` is the
+  escape hatch for the important ones.
+- Not every word has both a UK and a US transcription — Wiktionary's coverage
+  is uneven.
+- Definitions are Wiktionary's, and Wiktionary writes for a reader who already
+  knows the word. The curated overrides exist to fix that where it matters.
 - No audio, by design.

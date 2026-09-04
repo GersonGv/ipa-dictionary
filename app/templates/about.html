@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}About the data | {{ site_name }}{% endblock %}
+{% block description %}Where the {{ site_name }} entries, pronunciations and example sentences come from, and how they are licensed.{% endblock %}
+
+{% block main %}
+<article class="entry">
+<h1 class="headword">About</h1>
+
+<p class="definition">{{ site_name }} lists {{ "{:,}".format(total) }} English headwords. Each one shows the British and American pronunciation in the International Phonetic Alphabet, a definition per sense, and example sentences.</p>
+
+<h2>Where the data comes from</h2>
+<p class="definition">The entries are built from <a href="https://en.wiktionary.org">English Wiktionary</a>, parsed with <a href="https://github.com/tatuylonen/wiktextract">wiktextract</a> and filtered down to the words a general-purpose dictionary would actually list. Pronunciations keep Wiktionary's own accent labels: Received Pronunciation and its neighbours become the UK transcription, General American and its neighbours the US one.</p>
+<p class="definition">A small set of hand-written entries overrides the generated ones where the automatic parse was thin — mostly words whose UK/US difference is worth a note.</p>
+
+<h2>Licence</h2>
+<p class="definition">Wiktionary content is licensed <a href="https://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0</a>, and the definitions and examples here are derivative of it, so they carry the same licence. Attribution: English Wiktionary contributors.</p>
+
+<h2>Limitations</h2>
+<ul class="examples">
+  <li>One transcription per accent. Real dictionaries list variants; the note field is the escape hatch for the important ones.</li>
+  <li>Not every word has both a UK and a US transcription — Wiktionary's coverage is uneven, and an untagged pronunciation is used for both.</li>
+  <li>IPA rendering depends on your fonts. Rarer symbols (t̬, ɚ) can look uneven in a system font.</li>
+  <li>No audio, by design.</li>
+</ul>
+</article>
+{% endblock %}

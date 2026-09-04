@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block title %}Something broke | {{ site_name }}{% endblock %}
+{% block canonical %}<meta name="robots" content="noindex">{% endblock %}
+{% block main %}
+<p class="status error">Something went wrong on our side. Try again in a moment.</p>
+<p class="panel-note"><a href="{{ url_for('pages.home') }}">Back to the dictionary</a></p>
+{% endblock %}

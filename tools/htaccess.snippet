@@ -1,0 +1,36 @@
+# Optional additions for the Python App's .htaccess.
+#
+# cPanel writes and OWNS that file — creating or restarting the app in "Setup
+# Python App" regenerates the PassengerAppRoot / PassengerBaseURI lines at the
+# top. Do not replace it with this file. Paste these blocks BELOW what cPanel
+# generated, and re-paste them if a restart wipes them out.
+#
+# What they buy you: Apache serves /static itself instead of waking a Python
+# process for every stylesheet, and text responses go out compressed. On a
+# dictionary page that is most of the transfer.
+
+# Serve static assets directly, bypassing Passenger entirely.
+<IfModule mod_alias.c>
+  Alias /static /home/CPANELUSER/dictionary/app/static
+</IfModule>
+PassengerBaseURI /
+
+<IfModule mod_expires.c>
+  ExpiresActive On
+  # The app appends ?v=<mtime> to every asset URL, so these can be cached hard.
+  ExpiresByType text/css "access plus 1 year"
+  ExpiresByType application/javascript "access plus 1 year"
+  ExpiresByType image/svg+xml "access plus 1 year"
+</IfModule>
+
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css application/javascript application/json application/xml
+</IfModule>
+
+# Canonical host: send www to the bare subdomain so a word page is not indexed
+# twice. Edit the hostname, or drop this block if www is not set up.
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+  RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
+</IfModule>

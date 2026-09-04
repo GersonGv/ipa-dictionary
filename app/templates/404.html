@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Not found | {{ site_name }}{% endblock %}
+{% block canonical %}<meta name="robots" content="noindex,follow">{% endblock %}
+
+{% block main %}
+{% if query %}
+<p class="status error"><b>{{ query }}</b> is not in the dictionary.</p>
+{% if suggestions %}
+<section class="panel">
+  <h2>Did you mean</h2>
+  <ul class="chips">
+    {% for word in suggestions %}
+    <li><a href="{{ word.word|word_path }}">{{ word.display }}</a></li>
+    {% endfor %}
+  </ul>
+</section>
+{% endif %}
+{% else %}
+<p class="status error">That page does not exist.</p>
+{% endif %}
+<p class="panel-note"><a href="{{ url_for('pages.home') }}">Back to the dictionary</a></p>
+{% endblock %}

@@ -1,0 +1,38 @@
+{# The rendered body of one dictionary entry, shared by the word page and any
+   place that needs to show a full entry inline. #}
+<h1 class="headword">{{ entry.display }}</h1>
+
+<ul class="pron">
+  {% if entry.ipa_uk %}
+  <li class="uk"><span class="tag">UK</span> <span class="ipa">/{{ entry.ipa_uk }}/</span></li>
+  {% endif %}
+  {% if entry.ipa_us %}
+  <li class="us"><span class="tag">US</span> <span class="ipa">/{{ entry.ipa_us }}/</span></li>
+  {% endif %}
+</ul>
+
+{% if not entry.ipa_uk and not entry.ipa_us %}
+<p class="note">No pronunciation has been transcribed for this word yet.</p>
+{% endif %}
+
+{% if entry.note %}
+<p class="note"><b>Note</b> {{ entry.note }}</p>
+{% endif %}
+
+<ol class="senses">
+  {% for sense in entry.senses %}
+  <li class="sense">
+    <div class="sense-head">
+      <span class="sense-num">{{ loop.index }}</span>
+      {% if sense.pos %}<span class="pos">{{ sense.pos }}</span>{% endif %}
+      {% for tag in (sense.tags or '').split(',') if tag %}<span class="pos tag-soft">{{ tag }}</span>{% endfor %}
+    </div>
+    <p class="definition">{{ sense.definition }}</p>
+    {% if sense.examples %}
+    <ul class="examples">
+      {% for example in sense.examples %}<li>{{ example.text }}</li>{% endfor %}
+    </ul>
+    {% endif %}
+  </li>
+  {% endfor %}
+</ol>

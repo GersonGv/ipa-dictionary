@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% set first = entry.senses[0] if entry.senses else None %}
+
+{% block title %}{{ entry.display }} — UK &amp; US pronunciation and meaning | {{ site_name }}{% endblock %}
+{% block description %}{{ entry.display }}{% if entry.ipa_uk %} is pronounced /{{ entry.ipa_uk }}/ in British English{% endif %}{% if entry.ipa_us %} and /{{ entry.ipa_us }}/ in American English{% endif %}.{% if first %} {{ first.definition }}{% endif %}{% endblock %}
+{% block canonical %}<link rel="canonical" href="{{ site_url }}{{ entry.word|word_path }}">{% endblock %}
+
+{% block head %}
+<script type="application/ld+json">
+{{ entry|entry_jsonld|safe }}
+</script>
+{% endblock %}
+
+{% block main %}
+{% if redirected_from %}
+<p class="status">Showing <b>{{ entry.display }}</b> — <i>{{ redirected_from }}</i> is a form of it.</p>
+{% endif %}
+
+<article class="entry">
+{% include "_entry_body.html" %}
+</article>
+
+{% if entry.forms %}
+{# Plain text, not links: every form resolves back to this same page, so
+   linking them would only spawn near-duplicate URLs for a crawler to chew on.
+   They are here so a reader searching for "tomatoes" can see why they landed
+   on "tomato". #}
+<section class="panel">
+  <h2>Other forms</h2>
+  <ul class="chips">
+    {% for form in entry.forms|sort(attribute='form') %}
+    <li><span>{{ form.form }}</span></li>
+    {% endfor %}
+  </ul>
+</section>
+{% endif %}
+{% endblock %}

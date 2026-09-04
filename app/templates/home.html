@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}{{ site_name }} — British &amp; American pronunciations in IPA{% endblock %}
+
+{% block main %}
+<section class="home">
+  <section class="panel">
+    <h2>Words worth hearing twice</h2>
+    <p class="panel-note">These are pronounced noticeably differently on each side of the Atlantic.</p>
+    <ul class="chips">
+      {% for word in featured %}
+      <li><a href="{{ word.word|word_path }}">{{ word.display }}
+        {% if word.ipa_uk and word.ipa_us and word.ipa_uk != word.ipa_us %}
+        <span class="chip-ipa">/{{ word.ipa_uk }}/ · /{{ word.ipa_us }}/</span>
+        {% endif %}
+      </a></li>
+      {% endfor %}
+    </ul>
+  </section>
+
+  <section class="panel">
+    <h2>Browse the dictionary</h2>
+    <p class="panel-note">{{ "{:,}".format(total) }} headwords.</p>
+    <ul class="chips letters">
+      {% for letter in letters %}
+      <li><a href="{{ url_for('pages.browse', letter=letter) }}">{{ letter|upper }}</a></li>
+      {% endfor %}
+    </ul>
+  </section>
+
+  <section class="panel">
+    <h2>Reading the notation</h2>
+    <p class="panel-note">Symbols are written between slashes. A few that trip people up:</p>
+    <dl class="legend">
+      <div><dt>ˈ</dt><dd>Main stress — the syllable right after it is the strong one.</dd></div>
+      <div><dt>ˌ</dt><dd>Secondary stress, weaker than the main one.</dd></div>
+      <div><dt>ə</dt><dd>Schwa, the unstressed “uh” in <i>about</i>.</dd></div>
+      <div><dt>ː</dt><dd>The vowel before it is long.</dd></div>
+      <div><dt>ɚ / ɝː</dt><dd>An r-coloured vowel, typical of American English.</dd></div>
+      <div><dt>t̬</dt><dd>A tapped /t/, the quick d-like sound in American <i>better</i>.</dd></div>
+    </dl>
+  </section>
+</section>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}“{{ query }}” — search results | {{ site_name }}{% endblock %}
+{% block canonical %}<meta name="robots" content="noindex,follow">{% endblock %}
+
+{% block main %}
+{% if results %}
+<p class="status">{{ results|length }} result{{ '' if results|length == 1 else 's' }} for <b>{{ query }}</b>.</p>
+<ul class="results">
+  {% for word in results %}
+  <li>
+    <a class="result" href="{{ word.word|word_path }}">
+      <span class="r-word">{{ word.display }}</span>
+      {% if word.ipa_uk %}<span class="r-ipa">/{{ word.ipa_uk }}/</span>{% endif %}
+      {% if word.pos_list %}<span class="r-pos">{{ word.pos_list }}</span>{% endif %}
+      <span class="r-gloss">{{ word.gloss }}</span>
+    </a>
+  </li>
+  {% endfor %}
+</ul>
+{% else %}
+<p class="status error">Nothing matched <b>{{ query }}</b>.</p>
+<p class="panel-note">Check the spelling, or <a href="{{ url_for('pages.browse', letter='a') }}">browse the dictionary</a>.</p>
+{% endif %}
+{% endblock %}
