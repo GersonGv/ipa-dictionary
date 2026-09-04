@@ -8,13 +8,15 @@ SQL, in this order, stopping as soon as enough results are found:
     2. exact inflected form  ("ran" -> "run")
     3. prefix, most common word first
     4. word-internal substring
-    5. full-text over the one-line glosses
-    6. bounded edit distance over a small candidate pool  ("wather" -> "water")
+    5. bounded edit distance over a small candidate pool  ("wather" -> "water")
+    6. full-text over the one-line glosses
 
-Tiers 1-4 are index lookups. Tier 5 needs the FULLTEXT index on `words`.
-Tier 6 is the only one that does work in Python, and it only ever sees a few
-hundred candidates because the SQL that feeds it is anchored on the first
-character and on SOUNDEX.
+Tiers 5 and 6 trade places for a multi-word query: see `search`.
+
+Tiers 1-4 are index lookups. The full-text tier needs the FULLTEXT index on
+`words`. Edit distance is the only tier that does work in Python, and it only
+ever sees a few hundred candidates because the SQL that feeds it is anchored
+on the first character and on SOUNDEX.
 """
 
 import re
@@ -157,12 +159,23 @@ def search(query, limit=MAX_RESULTS):
     ):
         return results
 
-    # 5. inside the definitions
+    # Tiers 5 and 6 swap places depending on what was typed. One word is
+    # someone looking up a word, and a misspelling of it should beat a
+    # definition that happens to mention it — "tomatoe" wants "tomato", not
+    # "lycopene", which is what the full-text pass returns because MySQL
+    # expands `tomatoe*` onto glosses containing "tomatoes". Several words is
+    # someone describing a meaning, and edit distance against single
+    # headwords has nothing to say about that.
+    single_word = " " not in q
+
+    if single_word and len(q) >= 4 and take(_fuzzy(q, limit)):
+        return results
+
+    # inside the definitions
     if len(q) >= 3 and take(_fulltext(q, limit)):
         return results
 
-    # 6. near-misses
-    if len(q) >= 4:
+    if not single_word and len(q) >= 4:
         take(_fuzzy(q, limit))
 
     return results

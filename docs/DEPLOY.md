@@ -101,7 +101,9 @@ python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
 ```
 
 That downloads the ~3 GB English Wiktextract dump (resumable — rerun it if the
-connection drops), filters it, and writes `build/dictionary.sql.gz`.
+connection drops), filters it, and writes `build/dictionary.sql.gz` — about
+11 MB gzipped for ~64,000 headwords. Budget 10–15 minutes for the parse, plus
+however long the download takes.
 
 Then configure the upload and run it:
 
@@ -111,15 +113,16 @@ $EDITOR tools/deploy.env
 ./tools/import_remote.sh
 ```
 
-It uploads the gzipped dump and pipes it through `mysql` on the server. Expect
-several minutes; the last step, building the FULLTEXT index, is the slowest
-part and looks like a hang.
+It uploads the gzipped dump and pipes it through `mysql` on the server. The
+same import takes 13 seconds against a local MySQL 8; on shared hosting expect
+a few minutes. The last step, building the FULLTEXT index, is the slowest part
+and looks like a hang.
 
 Confirm:
 
 ```sh
 curl -s https://dictionary.example.com/api/health
-# {"status":"ok","words":103482}
+# {"status":"ok","words":63925}
 ```
 
 The import starts with `DROP TABLE`, so it replaces the lexicon wholesale.
@@ -159,12 +162,15 @@ tail -f ~/dictionary/stderr.log
 | `Unknown column ...` after a model change | Startup only ever runs `CREATE TABLE`, never `ALTER TABLE` | `ALTER TABLE` by hand in phpMyAdmin or the `mysql` CLI, or re-import |
 | Search finds nothing but exact words | The FULLTEXT index did not get built | `SHOW INDEX FROM words;` — if `ft_words_gloss` is missing, re-run the import |
 | `MySQL server has gone away` under low traffic | A pooled connection outlived the server's `wait_timeout` | Already handled by `pool_recycle=280`; if it persists the host's timeout is under 280s — lower it in `app/db.py` |
+| `'cryptography' package is required for sha256_password or caching_sha2_password auth methods` | MySQL 8 defaults to `caching_sha2_password`, which PyMySQL cannot do alone | `cryptography` is already in `requirements.txt`; this means the install did not pick it up — re-run `pip install -r requirements.txt` inside the app's virtualenv and restart |
 
 ## Memory
 
 Passenger holds one Python process (sometimes a few) per app. This one loads
 Flask, SQLAlchemy and nothing else, and never holds the lexicon in memory —
 every query is a bounded, indexed lookup. It sits comfortably inside a typical
-1 GB shared-hosting `LVE` limit. The database is the part that grows; a
-~100,000-word build is roughly 300–500 MB on disk, so check the account's disk
-quota before importing.
+1 GB shared-hosting `LVE` limit.
+
+The database is smaller than it sounds: the default ~64,000-word build measures
+**60 MB** including every index. Raising `MAX_RANK` scales that roughly
+linearly. Nothing here needs a large-disk plan.

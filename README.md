@@ -59,8 +59,26 @@ words a general-purpose dictionary would actually print:
   (`MAX_RANK` in `tools/build_data.sh` moves this line);
 - a **sense filter** dropping obsolete, archaic, rare and misspelling senses;
 - **inflections become forms, not entries** — "ran" is recorded as a form of
-  "run", so looking it up lands on the entry rather than on a stub reading
-  "simple past of run".
+  "run", so looking it up lands on the entry rather than on a stub. Wiktionary
+  gives many inflections a second, marginal life of their own ("ran" is also a
+  nautical noun meaning "yarns coiled on a spun-yarn winch"), which is enough
+  to make them survive the filters and then render as *only* that. An
+  inflection whose own senses carry no example sentence is folded into its
+  lemma; one that survives keeps its entry but is told what it is first
+  ("simple past of see" above the woodworking tool) before its own meanings.
+
+  Getting that last part right took several passes, and the failures are
+  instructive: leading with the relationship unconditionally turned "bad" into
+  "past participle of bid", because Wiktionary's inflection tables carry no
+  register labels and "bid" still lists a form that died out around 1500.
+  Reconstructed relationships are now only printed when the lemma is the
+  commoner word; relationships Wiktionary states outright on the form's own
+  page are trusted as-is.
+
+The default build is about **64,000 headwords** — roughly 54,000 single words
+and 10,000 idioms — in a 60 MB database. 89% of the commonest 20,000 words have
+a transcription; the rarer tail is thinner, because Wiktionary itself is
+thinner there, and those entries say so rather than showing a blank.
 
 Pronunciations keep Wiktionary's own accent labels: Received Pronunciation and
 its neighbours become the UK column, General American and its neighbours the
