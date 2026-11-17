@@ -196,11 +196,17 @@ function renderEntry(entry) {
           ${sense.pos ? `<span class="pos">${escapeHtml(sense.pos)}</span>` : ''}
         </div>
         <p class="definition">${escapeHtml(sense.definition)}</p>
-        <ul class="examples">
+        ${sense.examples.length ? `<ul class="examples">
           ${sense.examples.map((ex) => `<li>${highlightExample(ex, entry.word)}</li>`).join('')}
-        </ul>
+        </ul>` : ''}
       </li>`)
     .join('');
+
+  // Wiktionary content is CC BY-SA, which requires attribution on the entry.
+  const source = entry.source === 'wiktionary'
+    ? `<p class="source">From <a href="https://en.wiktionary.org/wiki/${encodeURIComponent(entry.word)}#English" rel="noopener">Wiktionary</a>,
+        available under <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license noopener">CC BY-SA 4.0</a>.</p>`
+    : '';
 
   el.entry.innerHTML = `
     <h1 class="headword">${escapeHtml(entry.display)}</h1>
@@ -209,7 +215,8 @@ function renderEntry(entry) {
       <li class="us"><span class="tag">US</span><span class="ipa">/${escapeHtml(entry.us)}/</span></li>
     </ul>
     ${entry.note ? `<p class="note"><b>Note.</b> ${escapeHtml(entry.note)}</p>` : ''}
-    <ol class="senses">${senses}</ol>`;
+    <ol class="senses">${senses}</ol>
+    ${source}`;
 
   el.status.hidden = true;
   el.home.hidden = true;

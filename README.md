@@ -51,6 +51,31 @@ missing a pronunciation, a definition, or has fewer than two examples. It writes
 - `data/index.json` — every headword plus a one-line gloss. Loaded once, drives the search box.
 - `data/entries/<letter>.json` — full entries, one shard per first letter, fetched only when a word in that letter is opened.
 
+## Importing words from Wiktionary
+
+`data/source/90-wiktionary.json` is generated, not hand-written. It holds the
+most frequent English words that Wiktionary gives both a British (RP/UK) and an
+American (GA/US) IPA transcription. To regenerate it:
+
+```sh
+pip install wordfreq
+curl -sS https://kaikki.org/dictionary/English/kaikki.org-dictionary-English.jsonl \
+  | python3 tools/import_wiktionary.py --limit 5000
+node tools/build.mjs
+```
+
+The dump is about 3.4 GB; it is streamed, never stored. Words are ranked by
+[wordfreq](https://github.com/rspeer/wordfreq), and the importer drops proper
+nouns, inflected forms ("went", "dogs"), and senses tagged obsolete, archaic,
+rare, or offensive. Words already in any other `data/source/` file are skipped,
+so curated entries always win — to fix an imported word, copy it into a curated
+file and edit it there.
+
+Imported entries carry `"source": "wiktionary"`. The build lets them through
+with fewer than two examples (many Wiktionary senses have none), and the app
+shows the CC BY-SA 4.0 attribution the licence requires under each one. The
+generated file is therefore under CC BY-SA 4.0 as well.
+
 ## Deploying to GitHub Pages
 
 Yes, this works on GitHub Pages, and search works fully. See "Why search works
@@ -121,13 +146,17 @@ Considered and rejected for this project:
 - **Bundled data always renders.** No rate limits, no CORS surprises, no outage,
   no request per lookup, and it works offline once loaded.
 
-The tradeoff is honest: coverage is whatever you curate. `data/source/` currently
-holds a starter set of about 50 words, weighted toward words whose British and
-American pronunciations actually differ.
+The tradeoff is honest: coverage is whatever you curate or import. `data/source/`
+holds a hand-written starter set of about 50 words, weighted toward words whose
+British and American pronunciations actually differ, plus the Wiktionary import
+described above.
 
 ## Limitations
 
-- Coverage is the curated word list, not a full lexicon. Unknown words say so.
+- Coverage is the curated and imported word list, not a full lexicon. Unknown words say so.
+- Imported entries are only as good as Wiktionary. Its transcriptions follow a
+  narrower style than learner's dictionaries (e.g. RP `ɛ` where many write `e`),
+  and some senses have no example sentences.
 - One transcription per accent. Real dictionaries list variants; the `note` field
   is the escape hatch for the important ones.
 - IPA rendering depends on the reader's fonts. The stack in `--ipa` starts with

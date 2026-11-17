@@ -52,9 +52,12 @@ for (const file of files) {
 
     const senses = Array.isArray(raw.senses) ? raw.senses : [];
     if (senses.length === 0) fail(where, 'needs at least one sense');
+    // Hand-written entries must have two examples per sense. Imported entries
+    // (those with a "source") are kept even when the source has no examples.
+    const minExamples = raw.source ? 0 : 2;
     senses.forEach((sense, i) => {
       if (!sense.definition) fail(where, `sense ${i + 1} has no definition`);
-      if (!Array.isArray(sense.examples) || sense.examples.length < 2) {
+      if (!Array.isArray(sense.examples) || sense.examples.length < minExamples) {
         fail(where, `sense ${i + 1} needs at least two example sentences`);
       }
     });
@@ -65,6 +68,7 @@ for (const file of files) {
       uk: raw.uk,
       us: raw.us,
       ...(raw.note ? { note: raw.note } : {}),
+      ...(raw.source ? { source: raw.source } : {}),
       senses: senses.map((s) => ({
         pos: s.pos ?? '',
         definition: s.definition,
