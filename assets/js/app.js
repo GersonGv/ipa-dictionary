@@ -41,9 +41,13 @@ const normalise = (s) => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036
 
 const shardOf = (word) => (/^[a-z]/.test(word) ? word[0] : '_');
 
-/** Levenshtein distance, abandoned as soon as it exceeds `max`. */
+/**
+ * Edit distance where swapping two adjacent letters counts as one edit
+ * ("shcool" -> "school" is 1, not 2). Abandoned as soon as it exceeds `max`.
+ */
 function editDistance(a, b, max) {
   if (Math.abs(a.length - b.length) > max) return max + 1;
+  let before = null;
   let prev = Array.from({ length: b.length + 1 }, (_, i) => i);
   for (let i = 1; i <= a.length; i++) {
     const curr = [i];
@@ -51,9 +55,13 @@ function editDistance(a, b, max) {
     for (let j = 1; j <= b.length; j++) {
       const cost = a[i - 1] === b[j - 1] ? 0 : 1;
       curr[j] = Math.min(prev[j] + 1, curr[j - 1] + 1, prev[j - 1] + cost);
+      if (before && i > 1 && j > 1 && a[i - 1] === b[j - 2] && a[i - 2] === b[j - 1]) {
+        curr[j] = Math.min(curr[j], before[j - 2] + 1);
+      }
       best = Math.min(best, curr[j]);
     }
     if (best > max) return max + 1;
+    before = prev;
     prev = curr;
   }
   return prev[b.length];
@@ -146,11 +154,14 @@ function rememberWord(word) {
 
 /* ---- rendering --------------------------------------------------------- */
 
-function renderChips(container, words) {
+function renderChips(container, words, { warnMissing = false } = {}) {
   container.innerHTML = words
     .map((w) => {
       const item = index.find((i) => i.word === w);
-      if (!item) return '';
+      if (!item) {
+        if (warnMissing) console.warn(`Featured word "${w}" is not in the dictionary data; it was skipped.`);
+        return '';
+      }
       return `<li><button type="button" data-word="${escapeHtml(w)}">${escapeHtml(item.display)}</button></li>`;
     })
     .join('');
@@ -193,11 +204,17 @@ function renderEntry(entry) {
           ${sense.pos ? `<span class="pos">${escapeHtml(sense.pos)}</span>` : ''}
         </div>
         <p class="definition">${escapeHtml(sense.definition)}</p>
-        <ul class="examples">
+        ${sense.examples.length ? `<ul class="examples">
           ${sense.examples.map((ex) => `<li>${highlightExample(ex, entry.word)}</li>`).join('')}
-        </ul>
+        </ul>` : ''}
       </li>`)
     .join('');
+
+  // Wiktionary content is CC BY-SA, which requires attribution on the entry.
+  const source = entry.source === 'wiktionary'
+    ? `<p class="source">From <a href="https://en.wiktionary.org/wiki/${encodeURIComponent(entry.word)}#English" rel="noopener">Wiktionary</a>,
+        available under <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license noopener">CC BY-SA 4.0</a>.</p>`
+    : '';
 
   el.entry.innerHTML = `
     <h1 class="headword">${escapeHtml(entry.display)}</h1>
@@ -206,7 +223,8 @@ function renderEntry(entry) {
       <li class="us"><span class="tag">US</span><span class="ipa">/${escapeHtml(entry.us)}/</span></li>
     </ul>
     ${entry.note ? `<p class="note"><b>Note.</b> ${escapeHtml(entry.note)}</p>` : ''}
-    <ol class="senses">${senses}</ol>`;
+    <ol class="senses">${senses}</ol>
+    ${source}`;
 
   el.status.hidden = true;
   el.home.hidden = true;
@@ -375,7 +393,7 @@ window.addEventListener('hashchange', route);
     showStatus(`Could not load the dictionary data (${err.message}).`, true);
     return;
   }
-  renderChips(el.featured, FEATURED);
+  renderChips(el.featured, FEATURED, { warnMissing: true });
   renderRecent();
   // Focus before routing: route() fills the input, and focusing afterwards
   // would pop the suggestion list open on top of a freshly opened entry.

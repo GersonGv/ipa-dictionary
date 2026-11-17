@@ -180,6 +180,8 @@ body {
 .examples { margin: .7rem 0 0 2rem; padding: 0 0 0 .9rem; list-style: none; border-left: 2px solid var(--line); }
 .examples li { color: var(--ink-2); padding: .22rem 0; }
 .examples b { color: var(--ink); font-weight: 600; }
+.source { margin-top: 2rem; font-size: .85rem; color: var(--ink-2); }
+.source a { color: inherit; }
 
 /* ---- home panels ------------------------------------------------------- */
 .home { padding-bottom: 2.5rem; }
