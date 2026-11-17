@@ -23,6 +23,7 @@ import argparse
 import json
 import re
 import sys
+import unicodedata
 from pathlib import Path
 
 import wordfreq
@@ -31,7 +32,7 @@ ROOT = Path(__file__).resolve().parent.parent
 SOURCE_DIR = ROOT / 'data' / 'source'
 OUT_FILE = SOURCE_DIR / '90-wiktionary.json'
 
-UK_TAGS = {'Received-Pronunciation', 'UK', 'British'}
+UK_TAGS = {'Received-Pronunciation', 'UK', 'British', 'Southern-England'}
 US_TAGS = {'General-American', 'US'}
 
 # Wiktextract part-of-speech codes -> the labels the curated data uses.
@@ -39,7 +40,7 @@ POS = {
     'noun': 'noun', 'verb': 'verb', 'adj': 'adjective', 'adv': 'adverb',
     'prep': 'preposition', 'pron': 'pronoun', 'conj': 'conjunction',
     'intj': 'interjection', 'det': 'determiner', 'num': 'number',
-    'article': 'determiner',
+    'article': 'determiner', 'postp': 'adverb',
 }
 
 # Senses carrying any of these tags are dropped.
@@ -56,26 +57,67 @@ MAX_EXAMPLES = 3
 MAX_EXAMPLE_LEN = 180
 
 
+PHONEMIC_RE = re.compile(r'^\s*/([^/,]+)/')
+PHONETIC_RE = re.compile(r'^\s*\[([^\],~]+)')
+
+
 def clean_ipa(raw):
-    """'/ˈʃɛd.juːl/' -> 'ˈʃɛd.juːl'. Phonetic [..] transcriptions are rejected."""
-    raw = raw.strip()
-    if not (raw.startswith('/') and raw.endswith('/')):
+    """Returns (ipa, is_phonetic) or None.
+
+    '/ˈsɪt.i/ [ˈsɪɾ.i]' -> ('ˈsɪt.i', False): the leading /phonemic/ part wins.
+    '[ˈsiː.zn̩]' -> ('ˈsiː.zn̩', True): narrow [phonetic] transcriptions are a
+    fallback, with aspiration and most diacritics stripped.
+    """
+    m = PHONEMIC_RE.match(raw)
+    phonetic = False
+    if not m:
+        m = PHONETIC_RE.match(raw)
+        phonetic = True
+    if not m:
         return None
-    ipa = raw[1:-1].strip()
-    if not ipa or '/' in ipa or ',' in ipa:
+    ipa = m.group(1).strip()
+    if phonetic:
+        ipa = ipa.replace('ʰ', '').replace('ɫ', 'l')
+        # Drop combining marks except the syllabic stroke (n̩) and nasal tilde.
+        ipa = ''.join(c for c in unicodedata.normalize('NFD', ipa)
+                      if not unicodedata.combining(c) or c in '̩̃')
+        ipa = unicodedata.normalize('NFC', ipa)
+    if not ipa:
         return None
-    # Learner's-dictionary style: r rather than ɹ, and no non-syllabic marks
-    # on diphthongs (haʊ̯s -> haʊs).
-    return ipa.replace('ɹ', 'r').replace('̯', '')
+    # Match the curated entries' style: r rather than ɹ, no non-syllabic marks
+    # on diphthongs (haʊ̯s -> haʊs), no tie bars on affricates (t͡ʃ -> tʃ).
+    return ipa.replace('ɹ', 'r').replace('̯', '').replace('͡', ''), phonetic
 
 
 def pick_ipa(sounds, wanted):
-    for s in sounds:
-        if wanted & set(s.get('tags', [])):
-            ipa = clean_ipa(s.get('ipa', ''))
-            if ipa:
-                return ipa
-    return None
+    """Best transcription for one accent, or None.
+
+    Preference order: tagged only with the accent's own tags; then untagged
+    (Wiktionary's way of saying "same in every major accent"); then tagged with
+    the accent plus a regional label. Within each tier, phonemic beats phonetic
+    and full forms beat weak forms; otherwise Wiktionary's order is kept.
+    Dated and obsolete pronunciations are never used.
+    """
+    best = None
+    for order, s in enumerate(sounds):
+        tags = set(s.get('tags') or [])
+        if tags & {'dated', 'obsolete', 'archaic'}:
+            continue
+        if not tags:
+            tier = 1
+        elif wanted & tags:
+            tier = 0 if tags <= wanted else 2
+        else:
+            continue
+        cleaned = clean_ipa(s.get('ipa', ''))
+        if not cleaned:
+            continue
+        ipa, phonetic = cleaned
+        weak = 'weak' in (s.get('note') or '')
+        key = (phonetic, tier, weak, order)
+        if best is None or key < best[0]:
+            best = (key, ipa)
+    return best[1] if best else None
 
 
 ARCHAIC_RE = re.compile(r"\b(thee|thou|thy|thine|hath|doth|ye|art thou|unto|shalt|wilt)\b", re.I)

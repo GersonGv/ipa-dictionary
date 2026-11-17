@@ -41,9 +41,13 @@ const normalise = (s) => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036
 
 const shardOf = (word) => (/^[a-z]/.test(word) ? word[0] : '_');
 
-/** Levenshtein distance, abandoned as soon as it exceeds `max`. */
+/**
+ * Edit distance where swapping two adjacent letters counts as one edit
+ * ("shcool" -> "school" is 1, not 2). Abandoned as soon as it exceeds `max`.
+ */
 function editDistance(a, b, max) {
   if (Math.abs(a.length - b.length) > max) return max + 1;
+  let before = null;
   let prev = Array.from({ length: b.length + 1 }, (_, i) => i);
   for (let i = 1; i <= a.length; i++) {
     const curr = [i];
@@ -51,9 +55,13 @@ function editDistance(a, b, max) {
     for (let j = 1; j <= b.length; j++) {
       const cost = a[i - 1] === b[j - 1] ? 0 : 1;
       curr[j] = Math.min(prev[j] + 1, curr[j - 1] + 1, prev[j - 1] + cost);
+      if (before && i > 1 && j > 1 && a[i - 1] === b[j - 2] && a[i - 2] === b[j - 1]) {
+        curr[j] = Math.min(curr[j], before[j - 2] + 1);
+      }
       best = Math.min(best, curr[j]);
     }
     if (best > max) return max + 1;
+    before = prev;
     prev = curr;
   }
   return prev[b.length];
