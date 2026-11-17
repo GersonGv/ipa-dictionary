@@ -21,6 +21,9 @@ const fail = (where, msg) => problems.push(`${where}: ${msg}`);
 // Words are sharded on their first character. Anything outside a-z lands in "_".
 const shardOf = (word) => (/^[a-z]/.test(word) ? word[0] : '_');
 
+const normaliseWord = (s) =>
+  String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').trim();
+
 const files = (await readdir(sourceDir)).filter((f) => f.endsWith('.json')).sort();
 const entries = new Map();
 
@@ -39,7 +42,9 @@ for (const file of files) {
 
   for (const raw of parsed) {
     const where = `${file} › ${raw.word ?? '(no word)'}`;
-    const word = String(raw.word ?? '').trim().toLowerCase();
+    // Must match normalise() in assets/js/app.js, which strips accents from the
+    // URL hash before lookup — otherwise "café" would be stored but never found.
+    const word = normaliseWord(raw.word ?? '');
     if (!word) { fail(where, 'missing "word"'); continue; }
     if (entries.has(word)) { fail(where, 'duplicate headword'); continue; }
     if (!raw.uk) fail(where, 'missing UK pronunciation');
@@ -85,12 +90,6 @@ for (const word of sorted) {
   shards.get(key)[word] = entries.get(word);
 }
 
-await rm(entriesDir, { recursive: true, force: true });
-await mkdir(entriesDir, { recursive: true });
-for (const [key, payload] of shards) {
-  await writeFile(join(entriesDir, `${key}.json`), JSON.stringify(payload));
-}
-
 // Index: [headword, display-if-different, parts of speech, one-line gloss].
 // Small enough to load up front, rich enough to render suggestions without a fetch.
 const index = sorted.map((word) => {
@@ -105,13 +104,42 @@ const index = sorted.map((word) => {
   ];
 });
 
+const indexPath = join(root, 'data', 'index.json');
+const shardList = [...shards.keys()].sort();
+
+// Keep the previous "generated" date unless the data actually changed, so a
+// rebuild with no edits leaves every output file byte-identical. This reads the
+// old output, so it has to run before the shards are rewritten below.
+let generated = new Date().toISOString().slice(0, 10);
+try {
+  const prev = JSON.parse(await readFile(indexPath, 'utf8'));
+  let unchanged =
+    Boolean(prev.generated) &&
+    JSON.stringify(prev.shards) === JSON.stringify(shardList) &&
+    JSON.stringify(prev.words) === JSON.stringify(index);
+  for (const key of shardList) {
+    if (!unchanged) break;
+    const old = await readFile(join(entriesDir, `${key}.json`), 'utf8').catch(() => null);
+    unchanged = old === JSON.stringify(shards.get(key));
+  }
+  if (unchanged) generated = prev.generated;
+} catch {
+  /* no previous index — first build */
+}
+
+await rm(entriesDir, { recursive: true, force: true });
+await mkdir(entriesDir, { recursive: true });
+for (const [key, payload] of shards) {
+  await writeFile(join(entriesDir, `${key}.json`), JSON.stringify(payload));
+}
+
 await writeFile(
-  join(root, 'data', 'index.json'),
+  indexPath,
   JSON.stringify({
     version: 1,
-    generated: new Date().toISOString().slice(0, 10),
+    generated,
     count: index.length,
-    shards: [...shards.keys()].sort(),
+    shards: shardList,
     words: index,
   })
 );

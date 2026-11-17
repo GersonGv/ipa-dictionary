@@ -146,11 +146,14 @@ function rememberWord(word) {
 
 /* ---- rendering --------------------------------------------------------- */
 
-function renderChips(container, words) {
+function renderChips(container, words, { warnMissing = false } = {}) {
   container.innerHTML = words
     .map((w) => {
       const item = index.find((i) => i.word === w);
-      if (!item) return '';
+      if (!item) {
+        if (warnMissing) console.warn(`Featured word "${w}" is not in the dictionary data; it was skipped.`);
+        return '';
+      }
       return `<li><button type="button" data-word="${escapeHtml(w)}">${escapeHtml(item.display)}</button></li>`;
     })
     .join('');
@@ -375,7 +378,7 @@ window.addEventListener('hashchange', route);
     showStatus(`Could not load the dictionary data (${err.message}).`, true);
     return;
   }
-  renderChips(el.featured, FEATURED);
+  renderChips(el.featured, FEATURED, { warnMissing: true });
   renderRecent();
   // Focus before routing: route() fills the input, and focusing afterwards
   // would pop the suggestion list open on top of a freshly opened entry.
